@@ -1,0 +1,21 @@
+pro run_smart_allclear
+
+fparam='smart_script/ar_param.txt'
+fpath='/home/phiggins/projects/all_clear_2/'
+
+ar_setup, ar_path=fpath, ar_param=fparam, $
+	get=get, defvars=outvars, status=outstatus
+
+params=ar_loadparam(fparam=fparamin, meta=outmeta, silent=insilent)
+
+fhmi=!ar_path+'data/2011.03.08_06:00:00_TAI_401_new.fits'
+mreadfits,fmdi,ind,dat
+index2map,ind[0],dat[*,*,0],bmap
+
+stop
+
+
+
+
+
+end
