@@ -1,0 +1,60 @@
+For each FITS file provided, either we will provide an event list (training
+set) or we ask you to make a prediction.  The primary image in each FITS 
+file is an array of dimension nx,ny,11,nt, where
+nx = number of pixels in x-direction
+ny = number of pixels in y-direction
+nt = number of times (this will typically be 7) 
+
+The 11 planes in the image contain:
+Br: radial component of the magnetic field (positive outward).
+Bphi: longitudinal component of the field (positive to solar west limb/to the
+right on the image)
+Btheta: latitudinal component of the field (positive toward solar N/roughly up on the image)
+Brerr: uncertainty in radial component of the field
+Bphierr: uncertainty in longitudinal component of the field
+Bthetaerr: uncertainty in latitudinal component of the field
+Lon: longitude
+Lat: latitude
+Vlos: line of sight velocity
+I0: Stokes I at wavelength 0
+bitmap: mask of active pixels in the image (bitmap=1)
+
+Field components and uncertainties are given in G; lat/lon are given in
+degrees; Vlos is given in cm/s; I0 is given in DN/s.  The uncertainties are
+1-sigma estimates determined only from the covariance matrix returned by the
+inversion, thus there are still systematic effects and ambiguity resolution
+failures that are not characterized by these uncertainties.
+
+Active pixels in the HARP have a value of 1 in the bitmap. Other pixels in the
+array may belong to other HARPs, thus, to avoid including the same pixel in the
+analysis of more than one HARP, only the pixels with a value of 1 in the bitmap
+should be included in the final results.  Also note that the images are not
+necessarily coaligned.
+
+A note on coordinate systems.
+
+The coordinate system is heliocentric, with the polar axis in the plane defined
+by the the Sun-SDO line and Solar-N, and perpendicular to the Sun-SDO line.  In
+other words, the satellite rotation is taken into account, but the solar-B
+angle is not.*  For those using planar geometry, it should be a reasonable
+approximation to take Bz=Br, Bx=Bphi, By=Btheta.
+
+*For those of you familiar with the "raw" SDO data, these data have been
+rotated by 180 degrees, such that solar-N is approximately up in the image, and
+the residual CROTA2 is generally less than 0.1 degree.
+
+For those of you who wish to work in a different coordinate system, or simply
+want to neglect the provided lon/lat, there is also an image extension in each
+FITS file containing the WCS keywords for each time.  The image has dimensions
+nt,10.  The 10 planes in the image contain: 
+CRPIX1
+CRPIX2
+CRVAL1
+CRVAL2
+CDELT1
+CDELT2
+DSUN_OBS
+RSUN_OBS
+CROTA2
+TIME
+where time is the time in hours before the final image.
